@@ -34,6 +34,7 @@ namespace api.Repositories
             return _context.Cursos.Find(idCurso);
         }
 
+        // Obter uma lista de cursos associados a um usuário
         public IList<Curso>? ObterPorUsuario(int idUsuario)
         {
             return _context.Cursos.Include(i => i.Usuario).Where(w => w.IdUsuario == idUsuario).ToList();

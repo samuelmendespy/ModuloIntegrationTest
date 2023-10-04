@@ -30,7 +30,7 @@ namespace api.Services
             {
                 Nome = cursoDTO.Nome,
                 Descricao = cursoDTO.Descricao,
-                Ofertado = cursoDTO.Ofertado,
+                Ativo = cursoDTO.Ativo,
                 IdUsuario = cursoDTO.IdUsuario,
             };
 

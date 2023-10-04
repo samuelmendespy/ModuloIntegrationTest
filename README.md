@@ -117,7 +117,11 @@ Aplicar migrations para criar banco de dados escola.db e tabelas
 # Configurando Projeto de testes (testes)
 > cd testes
 Adicionar pacote Microsoft.AspNetCore.Mvc.Testing ao projeto de testes
-> dotnet add package Microsoft.AspNetCore.Mvc.Testing
+> dotnet add package Microsoft.AspNetCore.Mvc.Testing --version 6.0.3
+
+Adicionar pacote Newtonsoft.Json para Serializar
+> dotnet add package Newtonsoft.Json --version 13.0.3
+
 Adicionar pacote AutoBogus 2.12
 > dotnet add package AutoBogus --version 2.12.0
 

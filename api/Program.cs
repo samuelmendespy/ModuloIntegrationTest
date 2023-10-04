@@ -1,11 +1,18 @@
-using IntroEntityFramework.Data;
 using Microsoft.EntityFrameworkCore;
+using api.Data;
+using api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<Context>(options =>
+// Add EntityFramework Context SQlite Database
+builder.Services.AddDbContext<EscolaContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
+
+// Add Repositories
+builder.Services.AddScoped<ICursoRepository, CursoRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+// Nota : Uma instância desses repositórios será criada para cada solicitação HTTP (escopo)
 
 // Add services to the container.
 
