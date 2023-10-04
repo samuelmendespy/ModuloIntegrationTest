@@ -1,20 +1,22 @@
 using api.ViewModels.Usuarios;
+using api;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Newtonsoft.Json;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
+
 namespace testes.Integration.Controllers
 {
-    public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly WebApplicationFactory<Startup> _factory;
         protected readonly HttpClient _httpClient;
         protected CadastrarUsuarioViewModelnput? CadastrarUsuarioViewModelnput;
         protected CadastrarUsuarioViewModelnput? CadastrarUsuarioViewModeOutput;
-        public UsuarioControllerTests(WebApplicationFactory<Program> factory)
+        public UsuarioControllerTests(WebApplicationFactory<Startup> factory)
         {
             _factory = factory;
             _httpClient = _factory.CreateClient();

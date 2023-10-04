@@ -13,7 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace curso.api
+namespace api
 {
     public class Startup
     {
