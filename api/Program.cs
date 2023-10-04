@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using api.Data;
 using api.Repositories;
+using api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 // Nota : Uma instância desses repositórios será criada para cada solicitação HTTP (escopo)
 
+// Register Services Dependency Injection
+builder.Services.AddScoped<ICursoService, CursoService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 // Add services to the container.
 
 builder.Services.AddControllers();

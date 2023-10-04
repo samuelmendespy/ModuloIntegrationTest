@@ -70,6 +70,15 @@ namespace api.Controllers
             return CreatedAtAction(nameof(ObterPorId), new {id = usuario.Id}, usuario);
         }
 
+        [HttpPost]
+        [Route("registrar")]
+        public IActionResult Cadastrar(UsuarioDTO usuarioDTO)
+        {
+            var usuario = _usuarioService.CriarUsuario(usuarioDTO);
+
+            return Ok(usuario);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Remover(int id)
         {

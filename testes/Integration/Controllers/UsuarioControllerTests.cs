@@ -1,29 +1,28 @@
 using api.ViewModels.Usuarios;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Newtonsoft.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
+using System.Text;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace testes.Integration.Controllers
 {
-    public class UsuarioControllerTests
+    public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
         protected readonly HttpClient _httpClient;
-
-
+        protected CadastrarUsuarioViewModelnput? CadastrarUsuarioViewModelnput;
         public UsuarioControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
             _httpClient = _factory.CreateClient();
         }
 
+        // public void Cadastrar_InserindoUsuarioComNomeETelefoneEAtivo_DeveRetornarSucesso()
+
         [Fact]
-        public void Cadastrar()
+        public void CadastrarUsuarioTest()
         { 
 
             //Arrange
@@ -33,14 +32,13 @@ namespace testes.Integration.Controllers
                 Telefone = "40028922",
                 Ativo = true
             };
-            StringContent content = new StringContent(JsonConvert.SerializeObject(cadastrarUsuarioViewModelnput));
+            StringContent content = new StringContent(JsonConvert.SerializeObject(cadastrarUsuarioViewModelnput), Encoding.UTF8, "application/json");
 
             // Act
-            var httpClientRequest = _httpClient.PostAsync("api/Usuario", content ).GetAwaiter().GetResult();
+            var httpClientRequest = _httpClient.PostAsync("api/Usuario/registrar", content ).GetAwaiter().GetResult();
 
             // Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, httpClientRequest.StatusCode);
-           
         }
     }
 }
