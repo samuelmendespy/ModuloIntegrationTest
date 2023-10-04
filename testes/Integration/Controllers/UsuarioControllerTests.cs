@@ -1,5 +1,6 @@
 using api.ViewModels.Usuarios;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Newtonsoft.Json;
@@ -18,7 +19,7 @@ namespace testes.Integration.Controllers
         public UsuarioControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
-            HttpClient _httpClient = _factory.CreateClient();
+            _httpClient = _factory.CreateClient();
         }
 
         public void Cadastrar()
@@ -32,14 +33,10 @@ namespace testes.Integration.Controllers
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(cadastrarUsuarioViewModelnput));
 
-            // Newtonsoft Serialize
-            // string serialized  = JsonConvert.SerializeObject(cadastrarUsuarioViewModelnput);
-            // StringContent content = new StringContent(serialized , Encoding.UTF8, "application/json");
-            
-            _httpClient.PostAsync("api/Usuario", content );
-            // Deserialize
-            // string json = "{\"Nome\":\"John Doe\",\"Telefone\":\"123456789\",\"Ativo\":true}";
-            // CadastrarUsuarioViewModelnput result = JsonConvert.DeserializeObject<CadastrarUsuarioViewModelnput>(json);
+            var httpClientRequest = _httpClient.PostAsync("api/Usuario", content ).GetAwaiter().GetResult();
+
+            Assert.Equal(System.Net.HttpStatusCode.OK, httpClientRequest.StatusCode);
+           
         }
     }
 }

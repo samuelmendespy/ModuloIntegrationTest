@@ -65,9 +65,9 @@ namespace api.Controllers
         [HttpPost]
         public IActionResult Criar(UsuarioDTO usuarioDTO)
         {
-            _usuarioService.CriarUsuario(usuarioDTO);
+            var usuario = _usuarioService.CriarUsuario(usuarioDTO);
 
-            return CreatedAtAction(nameof(ObterPorId), new {id = usuarioDTO.Id}, usuarioDTO);
+            return CreatedAtAction(nameof(ObterPorId), new {id = usuario.Id}, usuario);
         }
 
         [HttpDelete("{id}")]

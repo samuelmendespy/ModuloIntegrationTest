@@ -9,7 +9,7 @@ namespace api.Repositories
         void Atualizar(Usuario usuario);
         void Commit();
         Usuario? ObterPorId(int idUsuario);
-        Usuario? ObterPorNome(string nome);
+        List<Usuario>? ObterPorNome(string nome);
         List<Usuario>? ObterTodosOsUsuarios();
         Task<Usuario>? ObterUsuarioAsync(string nome);
     }

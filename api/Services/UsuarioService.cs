@@ -56,7 +56,7 @@ namespace api.Services
             return _usuarioRepository.ObterPorId(id);
         }
 
-        public Usuario? ObterUsuarioPorNome(string nome)
+        public List<Usuario>? ObterUsuarioPorNome(string nome)
         {
             return _usuarioRepository.ObterPorNome(nome);
         }

@@ -149,3 +149,26 @@ angular
 mvc : dotnet new mvc
 webmvc console : dotnet new console
 webmvc angular: dotnet new angular
+
+
+
+
+# Serializar / Deserializar
+
+Código com Newtonsoft.Json para Serializar
+```
+var cadastrarUsuarioViewModelnput = new CadastrarUsuarioViewModelnput
+{
+    Nome = "Unnamed Student",
+    Telefone = "40028922",
+    Ativo = true
+};
+string serialized  = JsonConvert.SerializeObject(cadastrarUsuarioViewModelnput);
+StringContent** content = new StringContent(serialized , Encoding.UTF8, "application/json");
+```
+
+Deserializar
+```
+string json = "{\"Nome\":\"John Doe\",\"Telefone\":\"123456789\",\"Ativo\":true}";
+CadastrarUsuarioViewModelnput result = JsonConvert.DeserializeObject<CadastrarUsuarioViewModelnput>(json);
+```

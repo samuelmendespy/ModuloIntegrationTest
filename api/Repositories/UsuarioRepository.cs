@@ -44,14 +44,22 @@ namespace api.Repositories
         {
             return _context.Usuarios.Find(id);
         }
-        public Usuario? ObterPorNome(string nome)
+        public List<Usuario>? ObterPorNome(string nome)
         {
-            return _context.Usuarios.FirstOrDefault(x => x.Nome.Equals(nome));
+            return _context.Usuarios.Where(x => x.Nome.Equals(nome)).ToList();
         }
 
          public async Task<Usuario>? ObterUsuarioAsync(string nome)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(x => x.Nome.Equals(nome));
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Nome.Equals(nome));
+            if (usuario == null)
+            {
+                usuario = new Usuario();
+                usuario.Nome = "Usuario não encontrado";
+                return usuario;
+            }
+
+            return usuario;
         }
 
        
