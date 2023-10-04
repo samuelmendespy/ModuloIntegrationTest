@@ -13,6 +13,7 @@ namespace testes.Integration.Controllers
         private readonly WebApplicationFactory<Program> _factory;
         protected readonly HttpClient _httpClient;
         protected CadastrarUsuarioViewModelnput? CadastrarUsuarioViewModelnput;
+        protected CadastrarUsuarioViewModelnput? CadastrarUsuarioViewModeOutput;
         public UsuarioControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
