@@ -1,8 +1,6 @@
-using api.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using api.Models;
+using api.DTOs;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -11,30 +9,17 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        // private readonly IUsuarioRepository _usuarioRepository;
-        private readonly EscolaContext _context;
-        public UsuarioController(
-            // IUsuarioRepository _usuarioRepository,
-            EscolaContext context;
-        )
-        {
-            // _usuarioRepository,
-            _context = context;
-        }
+        private readonly IUsuarioService _usuarioService;
 
-        [HttpPost]
-        public IActionResult Criar(Usuario usuario)
+        public UsuarioController(IUsuarioService usuarioService)
         {
-            _context.Add(usuario);
-            _context.SaveChanges();
-
-            return CreatedAction(nameof(ObterPorId), new {id = usuario.Id}, usuario)
+            _usuarioService = usuarioService;
         }
 
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
-            var usuario = _context.Usuarios.Find(id);
+            var usuario = _usuarioService.ObterUsuarioPorId(id);
             if (usuario == null)
             {
                 return NotFound();
@@ -46,43 +31,56 @@ namespace api.Controllers
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
-            var usuario = _context.Usuarios.Where(x => x.Nome.Equals(nome));
+            var usuario = _usuarioService.ObterUsuarioPorNome(nome);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
             return Ok(usuario);
         }
 
 
         [HttpPut("{id}")]
-        public IActionResult Atualizar(int id, Usuario usuario )
+        public IActionResult Atualizar(int id, UsuarioDTO usuarioDTO )
         {
-            var usuarioBanco = _context.Usuarios.Find(id);
+            var usuarioBanco = _usuarioService.ObterUsuarioPorId(id);
 
-            if (usuario == null)
+            if (usuarioBanco == null)
             {
                 return NotFound();
             }
 
-            usuarioBanco.Nome = usuario.Nome;
-            usuarioBanco.Telefone = usuario.Telefone;
-            usuarioBanco.Ativo = usuario.Ativo;
+            usuarioBanco.Nome = usuarioDTO.Nome;
+            usuarioBanco.Telefone = usuarioDTO.Telefone;
+            usuarioBanco.Ativo = usuarioDTO.Ativo;
 
-            _context.Usuarios.Update(usuarioBanco);
-            _context.SaveChanges();
+            _usuarioService.AtualizarUsuario(usuarioBanco);
 
             return Ok(usuarioBanco); 
+        }
+        
+        /// <summary>
+        /// Este serviço permite cadastrar um usuário cadastrado não existente.
+        /// </summary>
+        [HttpPost]
+        public IActionResult Criar(UsuarioDTO usuarioDTO)
+        {
+            _usuarioService.CriarUsuario(usuarioDTO);
+
+            return CreatedAtAction(nameof(ObterPorId), new {id = usuarioDTO.Id}, usuarioDTO);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Remover(int id)
         {
-            var contatoBanco = _context.Usuarios.Find(id);
+            var contatoBanco = _usuarioService.ObterUsuarioPorId(id);
             
             if (contatoBanco == null)
             {
                 return NotFound();
             }
 
-            _context.Usuarios.Remove(contatoBanco);
-            _context.SaveChanges();
+            _usuarioService.DeletarUsuario(id);
 
             return NoContent();
         }

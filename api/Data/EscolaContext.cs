@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
@@ -11,10 +9,9 @@ namespace api.Data
         {
 
         }
-        public DbSet<Usuario> Cursos {get; set;}
+        public DbSet<Curso> Cursos {get; set;}
         public DbSet<Usuario> Usuarios {get; set;}
 
-        }
-        
     }
+        
 }

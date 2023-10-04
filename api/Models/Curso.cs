@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace api.Data.Entities
+namespace api.Models
 {
     public class Curso
     {
@@ -12,6 +7,6 @@ namespace api.Data.Entities
         public string Descricao { get; set; } = "";
         public bool Ofertado { get; set; } = false;
         public int IdUsuario { get; set; }
-        public virtual Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; } = new Usuario();
     }
 }

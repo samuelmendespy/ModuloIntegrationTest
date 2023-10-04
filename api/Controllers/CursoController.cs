@@ -1,9 +1,6 @@
-using api.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
+using api.DTOs;
 
 namespace api.Controllers
 {
@@ -11,50 +8,55 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class CursoController : ControllerBase
     {
-        private readonly EscolaContext _context;
-        public CursoController(
-            EscolaContext context;
-        )
+        private readonly ICursoService _cursoService;
+        public CursoController(ICursoService cursoService)
         {
-            _context = context;
+            _cursoService = cursoService;
         }
 
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
-            var curso = _context.Cursos.Find(id);
+            var curso = _cursoService.ObterCursoPorId(id);
             if (curso == null)
             {
-                return NotFound();
+                return NotFound($"Não foi encontrado o usuário{id}");
             }
             else
             {
                 return Ok(curso);
             }
         }
-
+        
+        /// <summary>
+        /// Este serviço permite obter todos os cursos.
+        /// </summary>
+        /// <returns>Retorna status ok e dados doS cursoS </returns>
         [HttpGet("ObterTudo")]
         public IActionResult ObterTudo()
         {
-            var cursos = _context.Cursos.ToList();
-            if (cursos == null || cursos.Count == 0)
+            var cursos = _cursoService.ObterTodosCursos();
+            if (cursos == null || cursos.Count() == 0)
             {
-                return NotFound("Tarefas não encontradas");
+                return NotFound("Não foi encontrado curso algum");
             }
 
             return Ok(cursos);
         }
 
+        /// <summary>
+        /// Este serviço permite cadastrar curso para o usuário autenticado.
+        /// </summary>
+        /// <returns>Retorna status 201 e dados do curso do usuário</returns>
         [HttpPost]
-        public IActionResult Criar(Curso curso)
+        public IActionResult Criar(CursoDTO cursoDTO)
         {
-            if (string.IsNullOrEmpty(curso.Nome))
+            if (string.IsNullOrEmpty(cursoDTO.Nome))
             {
                 return BadRequest(new { Erro = "O nome do curso não pode estar vazio!" });
             }
  
-            _context.Add(curso);
-            _context.SaveChanges();
+            var curso = _cursoService.CriarCurso(cursoDTO);
             
             return CreatedAtAction(nameof(ObterPorId), new { id = curso.Id }, curso);
         }
@@ -62,19 +64,16 @@ namespace api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {
-            var cursoBanco = _context.Cursos.Find(id);
+            var cursoBanco = _cursoService.ObterCursoPorId(id);
 
             if (cursoBanco == null)
             {
                 return NotFound();
             }
 
-            _context.Cursos.Remove(cursoBanco);
-            _context.SaveChanges();
+            _cursoService.DeletarCurso(id);
 
             return NoContent();
         }
-
-        
     }
 }
