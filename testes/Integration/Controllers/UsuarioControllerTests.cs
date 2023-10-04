@@ -22,19 +22,23 @@ namespace testes.Integration.Controllers
             _httpClient = _factory.CreateClient();
         }
 
+        [Fact]
         public void Cadastrar()
-        {
+        { 
+
+            //Arrange
             var cadastrarUsuarioViewModelnput = new CadastrarUsuarioViewModelnput
             {
                 Nome = "Unnamed Student",
                 Telefone = "40028922",
                 Ativo = true
             };
-
             StringContent content = new StringContent(JsonConvert.SerializeObject(cadastrarUsuarioViewModelnput));
 
+            // Act
             var httpClientRequest = _httpClient.PostAsync("api/Usuario", content ).GetAwaiter().GetResult();
 
+            // Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, httpClientRequest.StatusCode);
            
         }
