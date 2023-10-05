@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace api.ViewModels.Usuarios
 {
-    public class CadastrarUsuarioViewModelnput
+    public class CadastrarUsuarioViewModelOutput
     {
+        public int Id { get; set; }
         public string Nome { get; set; } = "";
         public string Telefone { get; set; } = "";
-        public bool Ativo { get; set; } = true;
     }
 }
