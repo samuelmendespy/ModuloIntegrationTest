@@ -53,7 +53,7 @@ namespace api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, EscolaContext dbContext)
         {
             // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
@@ -63,14 +63,15 @@ namespace api
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseRouting();
 
             // app.UseApplyMigration();
+            dbContext.Database.Migrate();
         }
     }
 }
