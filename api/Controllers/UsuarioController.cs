@@ -2,6 +2,9 @@ using api.Models;
 using api.DTOs;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using SQLitePCL;
 
 namespace api.Controllers
 {
@@ -9,10 +12,15 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
+        private readonly ILogger<UsuarioController> _logger;
         private readonly IUsuarioService _usuarioService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(
+            IUsuarioService usuarioService,
+            ILogger<UsuarioController> logger
+            )
         {
+            _logger = logger;
             _usuarioService = usuarioService;
         }
 
@@ -71,12 +79,21 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("registrar")]
+        [Route("cadastrar")]
         public IActionResult Cadastrar(UsuarioDTO usuarioDTO)
         {
+            try
+            {
             var usuario = _usuarioService.CriarUsuario(usuarioDTO);
-
             return Ok(usuario);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return new StatusCodeResult(500);
+            }
+
         }
 
         [HttpDelete("{id}")]
