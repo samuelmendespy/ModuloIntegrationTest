@@ -1,5 +1,6 @@
 using api.ViewModels.Usuarios;
 using api;
+using api.Models;
 using testes.Configurations;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -18,7 +19,6 @@ namespace testes.Integration.Controllers
         protected readonly HttpClient _httpClient;
         protected CadastrarUsuarioViewModelInput? CadastrarUsuarioViewModelInput;
         protected CadastrarUsuarioViewModelOutput? CadastrarUsuarioViewModelOutput;
-        protected BuscarUsuariosViewModelOutput? BuscarUsuariosViewModelOutput;
         public UsuarioControllerTests(WebApplicationFactory<Startup> factory, ITestOutputHelper output)
         {
             _factory = factory;
@@ -56,14 +56,18 @@ namespace testes.Integration.Controllers
         public async Task ObterPorNome_InformandoNome_DeveRetornarSucesso()
         {
             // Arrange
-            var nomeUsuario  = "Unnamed Student";
+            var nomeUsuario = "Unnamed Student";
 
             // Act
             var httpClientRequest = await _httpClient.GetAsync($"api/Usuario/ObterPorNome?Nome={nomeUsuario}");
             httpClientRequest.EnsureSuccessStatusCode();
 
+            var responseContent = await httpClientRequest.Content.ReadAsStringAsync();
+            var usuariosEncontrados = JsonConvert.DeserializeObject<List<Usuario>>(responseContent);
+
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
+            Assert.Equal(nomeUsuario, usuariosEncontrados?[0].Nome);
         }
     }
 }
