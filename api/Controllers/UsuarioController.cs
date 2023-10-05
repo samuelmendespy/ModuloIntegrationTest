@@ -39,12 +39,12 @@ namespace api.Controllers
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
-            var usuario = _usuarioService.ObterUsuarioPorNome(nome);
-            if (usuario == null)
+            var listaUsuarios = _usuarioService.ObterUsuarioPorNome(nome);
+            if (listaUsuarios == null)
             {
                 return NotFound();
             }
-            return Ok(usuario);
+            return Ok(listaUsuarios);
         }
 
 

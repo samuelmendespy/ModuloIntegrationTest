@@ -18,6 +18,7 @@ namespace testes.Integration.Controllers
         protected readonly HttpClient _httpClient;
         protected CadastrarUsuarioViewModelInput? CadastrarUsuarioViewModelInput;
         protected CadastrarUsuarioViewModelOutput? CadastrarUsuarioViewModelOutput;
+        protected BuscarUsuariosViewModelOutput? BuscarUsuariosViewModelOutput;
         public UsuarioControllerTests(WebApplicationFactory<Startup> factory, ITestOutputHelper output)
         {
             _factory = factory;
@@ -32,13 +33,13 @@ namespace testes.Integration.Controllers
         { 
 
             //Arrange
-            var cadastrarUsuarioViewModelInput = new CadastrarUsuarioViewModelInput
+            CadastrarUsuarioViewModelInput = new CadastrarUsuarioViewModelInput
             {
                 Nome = "Unnamed Student",
                 Telefone = "40028922",
                 Ativo = true
             };
-            StringContent content = new StringContent(JsonConvert.SerializeObject(cadastrarUsuarioViewModelInput), Encoding.UTF8, "application/json");
+            StringContent content = new StringContent(JsonConvert.SerializeObject(CadastrarUsuarioViewModelInput), Encoding.UTF8, "application/json");
 
             // Act
             var httpClientRequest = await _httpClient.PostAsync("api/Usuario/cadastrar", content );
@@ -48,7 +49,21 @@ namespace testes.Integration.Controllers
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
             Assert.NotNull(CadastrarUsuarioViewModelOutput);
             Assert.Equal("Unnamed Student", CadastrarUsuarioViewModelOutput?.Nome);
-            // _output.WriteLine($"{nameof(UsuarioControllerTests)}_{nameof(CadastrarUsuario_InformandoNomeTeloneEAtivo_DeveRetronarSucesso)} = {await httpClientRequest.Content.ReadAsStringAsync()}");
+            _output.WriteLine($"{nameof(UsuarioControllerTests)}_{nameof(CadastrarUsuario_InformandoNomeTeloneEAtivo_DeveRetronarSucesso)} = {await httpClientRequest.Content.ReadAsStringAsync()}");
+        }
+
+        [Fact]
+        public async Task ObterPorNome_InformandoNome_DeveRetornarSucesso()
+        {
+            // Arrange
+            var nomeUsuario  = "Unnamed Student";
+
+            // Act
+            var httpClientRequest = await _httpClient.GetAsync($"api/Usuario/ObterPorNome?Nome={nomeUsuario}");
+            httpClientRequest.EnsureSuccessStatusCode();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
         }
     }
 }
